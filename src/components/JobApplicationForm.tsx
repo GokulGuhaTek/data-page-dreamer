@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Briefcase, Mail, Phone, MapPin, DollarSign, Clock, FileText } from "lucide-react";
+import { Briefcase, Mail, Phone, MapPin, DollarSign, Clock, FileText, Upload } from "lucide-react";
 
 const JobApplicationForm = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +32,8 @@ const JobApplicationForm = () => {
     referredBy: "",
   });
 
+  const [resume, setResume] = useState<File | null>(null);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -40,11 +42,19 @@ const JobApplicationForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setResume(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Application submitted:", formData);
+    console.log("Resume file:", resume);
     toast.success("Application submitted successfully! We'll get back to you soon.");
     // Reset form
+    setResume(null);
     setFormData({
       name: "",
       email: "",
@@ -140,6 +150,33 @@ const JobApplicationForm = () => {
                       placeholder="linkedin.com/in/johndoe"
                     />
                   </div>
+                </div>
+                
+                {/* Resume Upload */}
+                <div className="space-y-2">
+                  <Label htmlFor="resume" className="flex items-center gap-2">
+                    <Upload className="w-4 h-4" />
+                    Upload Resume / CV *
+                  </Label>
+                  <div className="flex items-center gap-4">
+                    <Input
+                      id="resume"
+                      name="resume"
+                      type="file"
+                      onChange={handleFileChange}
+                      required
+                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                      className="cursor-pointer file:cursor-pointer"
+                    />
+                    {resume && (
+                      <span className="text-sm text-muted-foreground">
+                        {resume.name}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Accepted formats: PDF, DOC, DOCX, TXT, RTF (Max 5MB)
+                  </p>
                 </div>
               </div>
 
