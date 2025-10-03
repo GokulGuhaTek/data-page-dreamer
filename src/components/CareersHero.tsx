@@ -19,17 +19,16 @@ const CareersHero = () => {
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-4 duration-700">
-          Join Our Team at GuhaTek
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          Join Our Team at <span className="text-primary">GuhaTek</span>
         </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-5 duration-700 delay-150">
+        <p className="text-xl md:text-2xl text-foreground/80 mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-5 duration-700 delay-150">
           Be part of an innovative company that's shaping the future of technology
         </p>
         <Button 
-          variant="hero" 
           size="lg" 
           onClick={scrollToApplication}
-          className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300"
+          className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300 bg-primary hover:bg-primary/90"
         >
           Apply Now <ArrowRight className="ml-2" />
         </Button>
