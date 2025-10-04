@@ -6,78 +6,96 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 // You can easily update this array to add/remove positions or mark them as featured
 const positions = [
+  // Engineering positions
   {
-    title: "Senior Software Engineer",
+    title: "SRE Operations & Incident Management",
     department: "Engineering",
-    location: "Bangalore / Remote",
-    type: "Full-time",
-    experience: "5+ years",
-    description: "Build scalable applications and lead technical initiatives in our growing engineering team.",
-    featured: true, // Set to true to highlight this position
-  },
-  {
-    title: "Product Manager",
-    department: "Product",
-    location: "Mumbai / Hybrid",
-    type: "Full-time",
-    experience: "3+ years",
-    description: "Drive product strategy and work with cross-functional teams to deliver exceptional user experiences.",
-    featured: false,
-  },
-  {
-    title: "UI/UX Designer",
-    department: "Design",
-    location: "Remote",
-    type: "Full-time",
-    experience: "2+ years",
-    description: "Create beautiful, intuitive interfaces and help shape our product's visual identity.",
-    featured: true, // Set to true to highlight this position
-  },
-  {
-    title: "DevOps Engineer",
-    department: "Infrastructure",
-    location: "Bangalore",
-    type: "Full-time",
-    experience: "4+ years",
-    description: "Build and maintain our cloud infrastructure, ensuring reliability and scalability.",
-    featured: false,
-  },
-  {
-    title: "Marketing Manager",
-    department: "Marketing",
-    location: "Delhi / Hybrid",
-    type: "Full-time",
-    experience: "3+ years",
-    description: "Lead marketing campaigns and grow our brand presence across multiple channels.",
-    featured: false,
-  },
-  {
-    title: "Sales Executive",
-    department: "Sales",
     location: "Coimbatore",
-    type: "Full-time",
-    experience: "2+ years",
-    description: "Drive revenue growth by building relationships with clients and closing deals.",
-    featured: false,
+    description: "Engineering team responsible for system reliability and incident handling.",
+    featured: true,
+  },
+  {
+    title: "DevOps & Automation",
+    department: "Engineering",
+    location: "Chennai",
+    description: "Engineering team focused on automation, CI/CD pipelines, and infrastructure as code.",
+    featured: true,
+  },
+  {
+    title: "Observability & Monitoring",
+    department: "Engineering",
+    location: "Bangalore",
+    description: "Engineering team implementing monitoring, logging, and alerting frameworks.",
+    featured: true,
+  },
+  {
+    title: "Reliability & Performance Engineering",
+    department: "Engineering",
+    location: "Coimbatore/Hybrid",
+    description: "Engineering team handling load testing, chaos engineering, and system resilience.",
+    featured: true,
+  },
+  // Product positions
+  {
+    title: "SRE Strategy & Governance",
+    department: "Product",
+    location: "Chennai/Hybrid",
+    description: "Product/Strategy team defining roadmaps, SLAs, error budgets, and operational policies.",
+    featured: true,
+  },
+  {
+    title: "Project Management & Delivery Excellence",
+    department: "Product",
+    location: "Bangalore/Hybrid",
+    description: "Product/Delivery team ensuring projects are executed efficiently and meet objectives.",
+    featured: true,
+  },
+  {
+    title: "Client Success & Engagement",
+    department: "Product",
+    location: "Coimbatore",
+    description: "Product/Customer Success team managing adoption, satisfaction, and client value delivery.",
+    featured: true,
+  },
+  // Infrastructure positions
+  {
+    title: "Cloud Architecture & Engineering",
+    department: "Infrastructure",
+    location: "Chennai",
+    description: "Infrastructure team designing scalable, secure, and cost-effective cloud solutions.",
+    featured: true,
+  },
+  // Sales & Marketing positions
+  {
+    title: "Sales & Business Development",
+    department: "Sales & Marketing",
+    location: "Bangalore",
+    description: "Marketing/Sales team driving revenue, acquiring clients, and managing proposals.",
+    featured: true,
+  },
+  // People/HR positions
+  {
+    title: "HR & Talent Acquisition",
+    department: "People/HR",
+    location: "Coimbatore/Hybrid",
+    description: "People/HR team handling recruitment, employee engagement, and culture development.",
+    featured: true,
   },
 ];
 
 const OpenPositions = () => {
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
   const [selectedLocation, setSelectedLocation] = useState<string>("all");
-  const [selectedType, setSelectedType] = useState<string>("all");
 
   // Get unique values for filters
   const departments = ["all", ...Array.from(new Set(positions.map(p => p.department)))];
-  const locations = ["all", ...Array.from(new Set(positions.map(p => p.location)))];
-  const types = ["all", ...Array.from(new Set(positions.map(p => p.type)))];
+  const locations = ["all", "Coimbatore", "Chennai", "Bangalore", "Coimbatore/Hybrid", "Chennai/Hybrid", "Bangalore/Hybrid"];
 
   // Filter positions based on selections
   const filteredPositions = positions.filter(position => {
     const departmentMatch = selectedDepartment === "all" || position.department === selectedDepartment;
     const locationMatch = selectedLocation === "all" || position.location === selectedLocation;
-    const typeMatch = selectedType === "all" || position.type === selectedType;
-    return departmentMatch && locationMatch && typeMatch;
+    return departmentMatch && locationMatch;
   });
 
   // Separate featured and regular positions
@@ -99,7 +117,7 @@ const OpenPositions = () => {
         {/* Filters */}
         <div className="flex flex-wrap gap-4 justify-center mb-12">
           <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
-            <SelectTrigger className="w-[180px] bg-background">
+            <SelectTrigger className="w-[200px] bg-background">
               <SelectValue placeholder="Department" />
             </SelectTrigger>
             <SelectContent className="bg-background z-50">
@@ -112,7 +130,7 @@ const OpenPositions = () => {
           </Select>
 
           <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-            <SelectTrigger className="w-[180px] bg-background">
+            <SelectTrigger className="w-[200px] bg-background">
               <SelectValue placeholder="Location" />
             </SelectTrigger>
             <SelectContent className="bg-background z-50">
@@ -123,61 +141,156 @@ const OpenPositions = () => {
               ))}
             </SelectContent>
           </Select>
-
-          <Select value={selectedType} onValueChange={setSelectedType}>
-            <SelectTrigger className="w-[180px] bg-background">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent className="bg-background z-50">
-              {types.map(type => (
-                <SelectItem key={type} value={type}>
-                  {type === "all" ? "All Types" : type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
 
-        {/* Featured Positions */}
+        {/* Featured Openings - Organized by Department */}
         {featuredPositions.length > 0 && (
           <div className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 flex items-center justify-center gap-2">
+            <h3 className="text-2xl font-bold mb-8 flex items-center justify-center gap-2">
               <Star className="w-6 h-6 text-primary fill-primary" />
               Featured Openings
             </h3>
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {featuredPositions.map((position, index) => (
-                <Card 
-                  key={index} 
-                  className="hover:shadow-[var(--shadow-elegant)] transition-all duration-300 hover:-translate-y-1 border-2 border-primary bg-gradient-to-br from-background to-[hsl(var(--featured-bg))]"
-                >
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge className="mb-2 bg-primary text-primary-foreground">
-                        {position.department}
-                      </Badge>
-                      <Badge variant="outline" className="border-primary">{position.type}</Badge>
-                    </div>
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      {position.title}
-                      <Star className="w-5 h-5 text-primary fill-primary" />
-                    </CardTitle>
-                    <CardDescription className="text-sm mt-2">
-                      {position.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-4 h-4" />
-                      {position.location}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Briefcase className="w-4 h-4" />
-                      {position.experience}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            
+            <div className="max-w-5xl mx-auto space-y-8">
+              {/* Engineering */}
+              <Card className="border-2 border-primary/20">
+                <CardHeader className="bg-primary/5">
+                  <CardTitle className="text-2xl text-center">Engineering</CardTitle>
+                  <CardDescription className="text-center">
+                    Teams directly responsible for building, operating, and maintaining systems.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">SRE Operations & Incident Management</span>
+                        <span className="text-muted-foreground"> – Engineering team responsible for system reliability and incident handling.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">DevOps & Automation</span>
+                        <span className="text-muted-foreground"> – Engineering team focused on automation, CI/CD pipelines, and infrastructure as code.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">Observability & Monitoring</span>
+                        <span className="text-muted-foreground"> – Engineering team implementing monitoring, logging, and alerting frameworks.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">Reliability & Performance Engineering</span>
+                        <span className="text-muted-foreground"> – Engineering team handling load testing, chaos engineering, and system resilience.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Product */}
+              <Card className="border-2 border-primary/20">
+                <CardHeader className="bg-primary/5">
+                  <CardTitle className="text-2xl text-center">Product</CardTitle>
+                  <CardDescription className="text-center">
+                    Teams focus on strategy, frameworks, and value delivery rather than hands-on coding.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">SRE Strategy & Governance</span>
+                        <span className="text-muted-foreground"> – Product/Strategy team defining roadmaps, SLAs, error budgets, and operational policies.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">Project Management & Delivery Excellence</span>
+                        <span className="text-muted-foreground"> – Product/Delivery team ensuring projects are executed efficiently and meet objectives.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">Client Success & Engagement</span>
+                        <span className="text-muted-foreground"> – Product/Customer Success team managing adoption, satisfaction, and client value delivery.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Infrastructure */}
+              <Card className="border-2 border-primary/20">
+                <CardHeader className="bg-primary/5">
+                  <CardTitle className="text-2xl text-center">Infrastructure</CardTitle>
+                  <CardDescription className="text-center">
+                    Teams that focus on cloud, networking, and foundational tech environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">Cloud Architecture & Engineering</span>
+                        <span className="text-muted-foreground"> – Infrastructure team designing scalable, secure, and cost-effective cloud solutions.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Marketing & Sales */}
+              <Card className="border-2 border-primary/20">
+                <CardHeader className="bg-primary/5">
+                  <CardTitle className="text-2xl text-center">Marketing & Sales</CardTitle>
+                  <CardDescription className="text-center">
+                    Teams that bring in business, manage relationships, and drive growth.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">Sales & Business Development</span>
+                        <span className="text-muted-foreground"> – Marketing/Sales team driving revenue, acquiring clients, and managing proposals.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* People & Culture (HR/Operations) */}
+              <Card className="border-2 border-primary/20">
+                <CardHeader className="bg-primary/5">
+                  <CardTitle className="text-2xl text-center">People & Culture (HR/Operations)</CardTitle>
+                  <CardDescription className="text-center">
+                    Critical support functions for talent and organizational health.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold">HR & Talent Acquisition</span>
+                        <span className="text-muted-foreground"> – People/HR team handling recruitment, employee engagement, and culture development.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
             </div>
           </div>
         )}
@@ -195,12 +308,9 @@ const OpenPositions = () => {
                   className="hover:shadow-[var(--shadow-elegant)] transition-all duration-300 hover:-translate-y-1 border-primary/10"
                 >
                   <CardHeader>
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge variant="secondary" className="mb-2">
-                        {position.department}
-                      </Badge>
-                      <Badge variant="outline">{position.type}</Badge>
-                    </div>
+                    <Badge variant="secondary" className="mb-2">
+                      {position.department}
+                    </Badge>
                     <CardTitle className="text-xl">{position.title}</CardTitle>
                     <CardDescription className="text-sm mt-2">
                       {position.description}
@@ -210,10 +320,6 @@ const OpenPositions = () => {
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="w-4 h-4" />
                       {position.location}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Briefcase className="w-4 h-4" />
-                      {position.experience}
                     </div>
                   </CardContent>
                 </Card>

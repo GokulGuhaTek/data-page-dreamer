@@ -189,14 +189,30 @@ const JobApplicationForm = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="interestedPosition">Interested Position *</Label>
-                    <Input
-                      id="interestedPosition"
-                      name="interestedPosition"
+                    <Select
                       value={formData.interestedPosition}
-                      onChange={handleInputChange}
+                      onValueChange={(value) => handleSelectChange("interestedPosition", value)}
                       required
-                      placeholder="Software Engineer"
-                    />
+                    >
+                      <SelectTrigger className="w-full bg-background">
+                        <SelectValue placeholder="Select a position" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background z-50">
+                        <SelectItem value="Site Reliability Engineer">Site Reliability Engineer</SelectItem>
+                        <SelectItem value="Senior Site Reliability Engineer">Senior Site Reliability Engineer</SelectItem>
+                        <SelectItem value="Lead Site Reliability Engineer">Lead Site Reliability Engineer</SelectItem>
+                        <SelectItem value="Application Site Reliability Engineer">Application Site Reliability Engineer</SelectItem>
+                        <SelectItem value="Security Operations Centre Engineer">Security Operations Centre Engineer</SelectItem>
+                        <SelectItem value="Performance Engineer">Performance Engineer</SelectItem>
+                        <SelectItem value="QA Automation Engineer (Playwright & Selenium)">QA Automation Engineer (Playwright & Selenium)</SelectItem>
+                        <SelectItem value="DevOps Engineer">DevOps Engineer</SelectItem>
+                        <SelectItem value="Lead SAP Engineer">Lead SAP Engineer</SelectItem>
+                        <SelectItem value="AI/ML Engineer">AI/ML Engineer</SelectItem>
+                        <SelectItem value="AI/ML Intern">AI/ML Intern</SelectItem>
+                        <SelectItem value="Internship">Internship</SelectItem>
+                        <SelectItem value="Fresher">Fresher</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="currentRole">Current Role</Label>
