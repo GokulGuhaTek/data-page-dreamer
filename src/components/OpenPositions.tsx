@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Briefcase, Star } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { featuredOpenings } from "@/data/featuredOpenings";
 
 // You can easily update this array to add/remove positions or mark them as featured
 const positions = [
@@ -98,9 +99,20 @@ const OpenPositions = () => {
     return departmentMatch && locationMatch;
   });
 
-  // Separate featured and regular positions
-  const featuredPositions = filteredPositions.filter(p => p.featured);
   const regularPositions = filteredPositions.filter(p => !p.featured);
+  
+  // Only show featured openings when "All Departments" is selected
+  const showFeaturedOpenings = selectedDepartment === "all";
+  const activeFeaturedOpenings = featuredOpenings.filter(opening => opening.isActive);
+  
+  // Group featured openings by category
+  const groupedFeaturedOpenings = activeFeaturedOpenings.reduce((acc, opening) => {
+    if (!acc[opening.category]) {
+      acc[opening.category] = [];
+    }
+    acc[opening.category].push(opening);
+    return acc;
+  }, {} as Record<string, typeof activeFeaturedOpenings>);
 
   return (
     <section className="py-20 px-4 bg-secondary/30">
@@ -143,154 +155,23 @@ const OpenPositions = () => {
           </Select>
         </div>
 
-        {/* Featured Openings - Organized by Department */}
-        {featuredPositions.length > 0 && (
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold mb-8 flex items-center justify-center gap-2">
-              <Star className="w-6 h-6 text-primary fill-primary" />
-              Featured Openings
-            </h3>
+        {/* Featured Openings - Only shown when All Departments selected */}
+        {showFeaturedOpenings && activeFeaturedOpenings.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-8 text-center">Featured Openings</h2>
             
-            <div className="max-w-5xl mx-auto space-y-8">
-              {/* Engineering */}
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="bg-primary/5">
-                  <CardTitle className="text-2xl text-center">Engineering</CardTitle>
-                  <CardDescription className="text-center">
-                    Teams directly responsible for building, operating, and maintaining systems.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">SRE Operations & Incident Management</span>
-                        <span className="text-muted-foreground"> – Engineering team responsible for system reliability and incident handling.</span>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">DevOps & Automation</span>
-                        <span className="text-muted-foreground"> – Engineering team focused on automation, CI/CD pipelines, and infrastructure as code.</span>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">Observability & Monitoring</span>
-                        <span className="text-muted-foreground"> – Engineering team implementing monitoring, logging, and alerting frameworks.</span>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">Reliability & Performance Engineering</span>
-                        <span className="text-muted-foreground"> – Engineering team handling load testing, chaos engineering, and system resilience.</span>
-                      </div>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              {/* Product */}
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="bg-primary/5">
-                  <CardTitle className="text-2xl text-center">Product</CardTitle>
-                  <CardDescription className="text-center">
-                    Teams focus on strategy, frameworks, and value delivery rather than hands-on coding.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">SRE Strategy & Governance</span>
-                        <span className="text-muted-foreground"> – Product/Strategy team defining roadmaps, SLAs, error budgets, and operational policies.</span>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">Project Management & Delivery Excellence</span>
-                        <span className="text-muted-foreground"> – Product/Delivery team ensuring projects are executed efficiently and meet objectives.</span>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">Client Success & Engagement</span>
-                        <span className="text-muted-foreground"> – Product/Customer Success team managing adoption, satisfaction, and client value delivery.</span>
-                      </div>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              {/* Infrastructure */}
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="bg-primary/5">
-                  <CardTitle className="text-2xl text-center">Infrastructure</CardTitle>
-                  <CardDescription className="text-center">
-                    Teams that focus on cloud, networking, and foundational tech environments.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">Cloud Architecture & Engineering</span>
-                        <span className="text-muted-foreground"> – Infrastructure team designing scalable, secure, and cost-effective cloud solutions.</span>
-                      </div>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              {/* Marketing & Sales */}
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="bg-primary/5">
-                  <CardTitle className="text-2xl text-center">Marketing & Sales</CardTitle>
-                  <CardDescription className="text-center">
-                    Teams that bring in business, manage relationships, and drive growth.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">Sales & Business Development</span>
-                        <span className="text-muted-foreground"> – Marketing/Sales team driving revenue, acquiring clients, and managing proposals.</span>
-                      </div>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              {/* People & Culture (HR/Operations) */}
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="bg-primary/5">
-                  <CardTitle className="text-2xl text-center">People & Culture (HR/Operations)</CardTitle>
-                  <CardDescription className="text-center">
-                    Critical support functions for talent and organizational health.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-primary fill-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <span className="font-semibold">HR & Talent Acquisition</span>
-                        <span className="text-muted-foreground"> – People/HR team handling recruitment, employee engagement, and culture development.</span>
-                      </div>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {activeFeaturedOpenings.map((opening) => (
+                <Card key={opening.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <Badge className="w-fit mb-2">{opening.category}</Badge>
+                    <CardTitle className="text-xl">{opening.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{opening.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         )}
@@ -298,7 +179,7 @@ const OpenPositions = () => {
         {/* Regular Positions */}
         {regularPositions.length > 0 && (
           <div>
-            {featuredPositions.length > 0 && (
+            {showFeaturedOpenings && activeFeaturedOpenings.length > 0 && (
               <h3 className="text-2xl font-bold mb-6 text-center">All Positions</h3>
             )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
