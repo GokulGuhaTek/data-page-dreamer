@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Briefcase, Star } from "lucide-react";
+import { MapPin, Briefcase, Star, Users, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { featuredOpenings } from "@/data/featuredOpenings";
+import { currentOpenings } from "@/data/currentOpenings";
 
 // You can easily update this array to add/remove positions or mark them as featured
 const positions = [
@@ -150,6 +151,44 @@ const OpenPositions = () => {
             </SelectContent>
           </Select>
         </div>
+
+        {/* Current Openings - Only shown when All Departments selected */}
+        {showFeaturedOpenings && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-8 text-center">Current Openings</h2>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {currentOpenings.filter(o => o.isActive).map((opening) => (
+                <Card key={opening.id} className="hover:shadow-lg transition-shadow border-primary/20">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge className="w-fit">{opening.department}</Badge>
+                      {opening.immediateJoiner && (
+                        <Badge variant="destructive" className="w-fit">Immediate Joiner</Badge>
+                      )}
+                    </div>
+                    <CardTitle className="text-xl">{opening.position}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-muted-foreground">{opening.details}</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <MapPin className="w-4 h-4 text-primary" />
+                      <span>{opening.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Briefcase className="w-4 h-4 text-primary" />
+                      <span>{opening.modeOfWork}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Users className="w-4 h-4 text-primary" />
+                      <span>{opening.requiredOpenings} {opening.requiredOpenings === 1 ? 'Position' : 'Positions'} Available</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Featured Openings - Only shown when All Departments selected */}
         {showFeaturedOpenings && activeFeaturedOpenings.length > 0 && (

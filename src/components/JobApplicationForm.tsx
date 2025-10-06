@@ -126,6 +126,9 @@ const JobApplicationForm = () => {
                       placeholder="john@example.com"
                     />
                   </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="contactNumber" className="flex items-center gap-2">
                       <Phone className="w-4 h-4" />
@@ -198,6 +201,7 @@ const JobApplicationForm = () => {
                         <SelectValue placeholder="Select a position" />
                       </SelectTrigger>
                       <SelectContent className="bg-background z-50">
+                        <SelectItem value="Current Openings">Current Openings</SelectItem>
                         <SelectItem value="Site Reliability Engineer">Site Reliability Engineer</SelectItem>
                         <SelectItem value="Senior Site Reliability Engineer">Senior Site Reliability Engineer</SelectItem>
                         <SelectItem value="Lead Site Reliability Engineer">Lead Site Reliability Engineer</SelectItem>
@@ -224,6 +228,9 @@ const JobApplicationForm = () => {
                       placeholder="Senior Developer"
                     />
                   </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="currentOrganization">Current Organization</Label>
                     <Input
