@@ -101,18 +101,14 @@ const OpenPositions = () => {
 
   const regularPositions = filteredPositions.filter(p => !p.featured);
   
-  // Only show featured openings when "All Departments" is selected
+  // Show featured openings when "All Departments" is selected
   const showFeaturedOpenings = selectedDepartment === "all";
   const activeFeaturedOpenings = featuredOpenings.filter(opening => opening.isActive);
   
-  // Group featured openings by category
-  const groupedFeaturedOpenings = activeFeaturedOpenings.reduce((acc, opening) => {
-    if (!acc[opening.category]) {
-      acc[opening.category] = [];
-    }
-    acc[opening.category].push(opening);
-    return acc;
-  }, {} as Record<string, typeof activeFeaturedOpenings>);
+  // When a specific department is selected, show featured openings for that department
+  const departmentFeaturedOpenings = selectedDepartment !== "all" 
+    ? featuredOpenings.filter(opening => opening.category === selectedDepartment)
+    : [];
 
   return (
     <section className="py-20 px-4 bg-secondary/30">
@@ -176,6 +172,26 @@ const OpenPositions = () => {
           </div>
         )}
 
+        {/* Department-specific Featured Openings */}
+        {selectedDepartment !== "all" && departmentFeaturedOpenings.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-8 text-center">{selectedDepartment} Positions</h2>
+            
+            <div className="grid gap-6">
+              {departmentFeaturedOpenings.map((opening) => (
+                <Card key={opening.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-2xl">{opening.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground leading-relaxed">{opening.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Regular Positions */}
         {regularPositions.length > 0 && (
           <div>
@@ -189,7 +205,7 @@ const OpenPositions = () => {
                   className="hover:shadow-[var(--shadow-elegant)] transition-all duration-300 hover:-translate-y-1 border-primary/10"
                 >
                   <CardHeader>
-                    <Badge variant="secondary" className="mb-2">
+                    <Badge variant="secondary" className="w-fit mb-2">
                       {position.department}
                     </Badge>
                     <CardTitle className="text-xl">{position.title}</CardTitle>

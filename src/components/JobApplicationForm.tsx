@@ -333,10 +333,10 @@ const JobApplicationForm = () => {
                       value={formData.isInNotice}
                       onValueChange={(value) => handleSelectChange("isInNotice", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-background">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background z-50">
                         <SelectItem value="yes">Yes</SelectItem>
                         <SelectItem value="no">No</SelectItem>
                       </SelectContent>
@@ -349,10 +349,10 @@ const JobApplicationForm = () => {
                       value={formData.isImmediateJoiner}
                       onValueChange={(value) => handleSelectChange("isImmediateJoiner", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-background">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background z-50">
                         <SelectItem value="yes">Yes</SelectItem>
                         <SelectItem value="no">No</SelectItem>
                       </SelectContent>
@@ -375,10 +375,10 @@ const JobApplicationForm = () => {
                       value={formData.hasOffers}
                       onValueChange={(value) => handleSelectChange("hasOffers", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-background">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background z-50">
                         <SelectItem value="yes">Yes</SelectItem>
                         <SelectItem value="no">No</SelectItem>
                       </SelectContent>
