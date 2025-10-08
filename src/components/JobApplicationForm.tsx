@@ -278,13 +278,23 @@ const JobApplicationForm = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="locationPreference">Location Preference</Label>
-                    <Input
-                      id="locationPreference"
-                      name="locationPreference"
+                    <Select
                       value={formData.locationPreference}
-                      onChange={handleInputChange}
-                      placeholder="Bangalore, Mumbai"
-                    />
+                      onValueChange={(value) => handleSelectChange("locationPreference", value)}
+                    >
+                      <SelectTrigger className="w-full bg-background">
+                        <SelectValue placeholder="Select location preference" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background z-50">
+                        <SelectItem value="Any">Any</SelectItem>
+                        <SelectItem value="Coimbatore">Coimbatore</SelectItem>
+                        <SelectItem value="Chennai">Chennai</SelectItem>
+                        <SelectItem value="Bangalore">Bangalore</SelectItem>
+                        <SelectItem value="Coimbatore/Hybrid">Coimbatore/Hybrid</SelectItem>
+                        <SelectItem value="Chennai/Hybrid">Chennai/Hybrid</SelectItem>
+                        <SelectItem value="Bangalore/Hybrid">Bangalore/Hybrid</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 
