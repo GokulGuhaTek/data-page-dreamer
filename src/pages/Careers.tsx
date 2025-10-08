@@ -64,7 +64,9 @@ const Careers = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/10 via-background to-accent/5 animate-gradient" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 animate-gradient bg-[length:200%_200%]">
+          <div className="absolute inset-0 digital-grid opacity-30" />
+        </div>
         
         <div className="relative z-10 container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

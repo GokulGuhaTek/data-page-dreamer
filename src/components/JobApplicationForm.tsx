@@ -286,6 +286,9 @@ const JobApplicationForm = () => {
                       placeholder="Bangalore, Mumbai"
                     />
                   </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="currentCTC" className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4" />
