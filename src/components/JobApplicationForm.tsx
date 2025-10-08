@@ -80,26 +80,26 @@ const JobApplicationForm = () => {
   };
 
   return (
-    <section id="application-form" className="py-20 px-4">
+    <section id="application-form" className="py-12 md:py-20 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-4xl">
         <Card className="shadow-[var(--shadow-elegant)] border-primary/20">
-          <CardHeader className="text-center space-y-2">
-            <CardTitle className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <CardHeader className="text-center space-y-2 p-4 sm:p-6">
+            <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Application Form
             </CardTitle>
-            <CardDescription className="text-base">
+            <CardDescription className="text-sm sm:text-base">
               Fill in your details and we'll get in touch with you shortly
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
               {/* Personal Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-primary" />
+              <div className="space-y-3 md:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   Personal Information
                 </h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name *</Label>
                     <Input
@@ -128,7 +128,7 @@ const JobApplicationForm = () => {
                   </div>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="contactNumber" className="flex items-center gap-2">
                       <Phone className="w-4 h-4" />
@@ -184,12 +184,12 @@ const JobApplicationForm = () => {
               </div>
 
               {/* Position Details */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-primary" />
+              <div className="space-y-3 md:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   Position Details
                 </h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="interestedPosition">Interested Position *</Label>
                     <Select
@@ -230,7 +230,7 @@ const JobApplicationForm = () => {
                   </div>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="currentOrganization">Current Organization</Label>
                     <Input
@@ -260,12 +260,12 @@ const JobApplicationForm = () => {
               </div>
 
               {/* Location & Compensation */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-primary" />
+              <div className="space-y-3 md:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   Location & Compensation
                 </h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="currentLocation">Current Location</Label>
                     <Input
@@ -298,7 +298,7 @@ const JobApplicationForm = () => {
                   </div>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="currentCTC" className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4" />
@@ -329,12 +329,12 @@ const JobApplicationForm = () => {
               </div>
 
               {/* Availability */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-primary" />
+              <div className="space-y-3 md:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   Availability
                 </h3>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="noticePeriod">Notice Period (Days)</Label>
                     <Input
@@ -382,12 +382,12 @@ const JobApplicationForm = () => {
               </div>
 
               {/* Additional Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-primary" />
+              <div className="space-y-3 md:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                  <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   Additional Information
                 </h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="hasOffers">Other Offers in Hand?</Label>
                     <Select
