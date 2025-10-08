@@ -64,24 +64,23 @@ const Careers = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={heroImage} 
-            alt="GuhaTek Careers - Join the Future of Reliability Engineering" 
-            className="w-full h-full object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-background/80" />
-        </div>
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/10 via-background to-accent/5 animate-gradient" />
         
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             Join the Future of Reliability Engineering at <span className="text-primary">GuhaTek</span>
           </h1>
-          <div className="max-w-4xl mx-auto space-y-4 text-lg md:text-xl text-foreground/90 mb-8 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-150">
-            <p>At GuhaTek, we believe reliability isn't a luxury — it's the foundation of modern innovation.</p>
-            <p>We're transforming how organizations build, scale, and sustain digital systems through SRE, DevOps, and Cloud Intelligence.</p>
-            <p>We're looking for thinkers, builders, and problem-solvers who want to shape the next chapter of operational excellence.</p>
-            <p className="font-semibold">If your passion lies in designing systems that never fail, innovating through automation, and delivering value at scale — you belong here.</p>
+          <div className="max-w-4xl mx-auto text-lg md:text-xl text-foreground/90 leading-relaxed animate-in fade-in slide-in-from-bottom-5 duration-700 delay-150">
+            <p className="mb-6">
+              At GuhaTek, we believe reliability isn't a luxury — it's the foundation of modern innovation. 
+              We're transforming how organizations build, scale, and sustain digital systems through SRE, DevOps, and Cloud Intelligence.
+            </p>
+            <p className="mb-6">
+              We're looking for thinkers, builders, and problem-solvers who want to shape the next chapter of operational excellence.
+            </p>
+            <p className="font-semibold">
+              If your passion lies in designing systems that never fail, innovating through automation, and delivering value at scale — you belong here.
+            </p>
           </div>
         </div>
       </section>

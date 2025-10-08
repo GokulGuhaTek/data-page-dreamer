@@ -1,7 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, LucideIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { LucideIcon } from "lucide-react";
 
 interface DepartmentSectionProps {
   icon: LucideIcon;
@@ -12,8 +10,6 @@ interface DepartmentSectionProps {
 }
 
 const DepartmentSection = ({ icon: Icon, title, description, roles, visualCue }: DepartmentSectionProps) => {
-  const navigate = useNavigate();
-
   return (
     <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-[var(--shadow-elegant)]">
       <CardHeader>
@@ -36,12 +32,6 @@ const DepartmentSection = ({ icon: Icon, title, description, roles, visualCue }:
           </ul>
         </div>
         <p className="text-xs text-muted-foreground italic">{visualCue}</p>
-        <Button 
-          onClick={() => navigate("/careers/apply")}
-          className="w-full"
-        >
-          Apply Now <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
       </CardContent>
     </Card>
   );
