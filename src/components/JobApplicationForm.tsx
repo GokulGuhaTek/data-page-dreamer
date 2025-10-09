@@ -16,24 +16,24 @@ const applicationSchema = z.object({
   name: z.string().min(1, "Full name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().min(1, "Email is required").email("Invalid email address").max(255),
   contactNumber: z.string().min(1, "Contact number is required").max(20),
-  linkedinProfile: z.string().optional(),
+  linkedinProfile: z.string().min(1, "LinkedIn profile is required").max(255),
   resume: z.instanceof(FileList).refine((files) => files?.length > 0, "Resume is required"),
   interestedPosition: z.string().min(1, "Please select a position"),
-  currentRole: z.string().optional(),
-  currentOrganization: z.string().optional(),
+  currentRole: z.string().min(1, "Current role is required").max(100),
+  currentOrganization: z.string().min(1, "Current organization is required").max(100),
   totalExperience: z.string().min(1, "Total experience is required"),
-  currentLocation: z.string().optional(),
-  locationPreference: z.string().optional(),
-  currentCTC: z.string().optional(),
-  expectedCTC: z.string().optional(),
-  noticePeriod: z.string().optional(),
-  isInNotice: z.string().optional(),
-  isImmediateJoiner: z.string().optional(),
-  hasOffers: z.string().optional(),
-  offeredCTC: z.string().optional(),
-  certifications: z.string().optional(),
-  referredBy: z.string().optional(),
-  comments: z.string().optional(),
+  currentLocation: z.string().min(1, "Current location is required").max(100),
+  locationPreference: z.string().min(1, "Location preference is required"),
+  currentCTC: z.string().min(1, "Current CTC is required"),
+  expectedCTC: z.string().min(1, "Expected CTC is required"),
+  noticePeriod: z.string().min(1, "Notice period is required"),
+  isInNotice: z.string().min(1, "Please select an option"),
+  isImmediateJoiner: z.string().min(1, "Please select an option"),
+  hasOffers: z.string().min(1, "Please select an option"),
+  offeredCTC: z.string().min(1, "Offered CTC is required"),
+  certifications: z.string().min(1, "Certifications are required").max(500),
+  referredBy: z.string().min(1, "Referred by is required").max(100),
+  comments: z.string().min(1, "Additional comments are required").max(1000),
 });
 
 type ApplicationFormData = z.infer<typeof applicationSchema>;
@@ -216,12 +216,15 @@ const JobApplicationForm = () => {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="linkedinProfile">LinkedIn Profile</Label>
+                    <Label htmlFor="linkedinProfile">LinkedIn Profile <span className="text-destructive">*</span></Label>
                     <Input
                       id="linkedinProfile"
                       placeholder="linkedin.com/in/johndoe"
                       {...register("linkedinProfile")}
                     />
+                    {errors.linkedinProfile && (
+                      <p className="text-xs text-destructive">{errors.linkedinProfile.message}</p>
+                    )}
                   </div>
                 </div>
                 
@@ -285,23 +288,29 @@ const JobApplicationForm = () => {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="currentRole">Current Role</Label>
+                    <Label htmlFor="currentRole">Current Role <span className="text-destructive">*</span></Label>
                     <Input
                       id="currentRole"
                       placeholder="Senior Developer"
                       {...register("currentRole")}
                     />
+                    {errors.currentRole && (
+                      <p className="text-xs text-destructive">{errors.currentRole.message}</p>
+                    )}
                   </div>
                 </div>
                 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="currentOrganization">Current Organization</Label>
+                    <Label htmlFor="currentOrganization">Current Organization <span className="text-destructive">*</span></Label>
                     <Input
                       id="currentOrganization"
                       placeholder="Tech Corp"
                       {...register("currentOrganization")}
                     />
+                    {errors.currentOrganization && (
+                      <p className="text-xs text-destructive">{errors.currentOrganization.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="totalExperience" className="flex items-center gap-2">
@@ -329,15 +338,18 @@ const JobApplicationForm = () => {
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="currentLocation">Current Location</Label>
+                    <Label htmlFor="currentLocation">Current Location <span className="text-destructive">*</span></Label>
                     <Input
                       id="currentLocation"
                       placeholder="Bangalore"
                       {...register("currentLocation")}
                     />
+                    {errors.currentLocation && (
+                      <p className="text-xs text-destructive">{errors.currentLocation.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="locationPreference">Location Preference</Label>
+                    <Label htmlFor="locationPreference">Location Preference <span className="text-destructive">*</span></Label>
                     <Select
                       value={locationPreference}
                       onValueChange={(value) => setValue("locationPreference", value)}
@@ -355,6 +367,9 @@ const JobApplicationForm = () => {
                         <SelectItem value="Bangalore/Hybrid">Bangalore/Hybrid</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.locationPreference && (
+                      <p className="text-xs text-destructive">{errors.locationPreference.message}</p>
+                    )}
                   </div>
                 </div>
                 
@@ -362,24 +377,30 @@ const JobApplicationForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="currentCTC" className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4" />
-                      Current CTC per Annum (₹)
+                      Current CTC per Annum (₹) <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="currentCTC"
                       placeholder="1200000"
                       {...register("currentCTC")}
                     />
+                    {errors.currentCTC && (
+                      <p className="text-xs text-destructive">{errors.currentCTC.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="expectedCTC" className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4" />
-                      Expected CTC per Annum (₹)
+                      Expected CTC per Annum (₹) <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="expectedCTC"
                       placeholder="1500000"
                       {...register("expectedCTC")}
                     />
+                    {errors.expectedCTC && (
+                      <p className="text-xs text-destructive">{errors.expectedCTC.message}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -392,16 +413,19 @@ const JobApplicationForm = () => {
                 </h3>
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="noticePeriod">Notice Period (Days)</Label>
+                    <Label htmlFor="noticePeriod">Notice Period (Days) <span className="text-destructive">*</span></Label>
                     <Input
                       id="noticePeriod"
                       type="number"
                       placeholder="30"
                       {...register("noticePeriod")}
                     />
+                    {errors.noticePeriod && (
+                      <p className="text-xs text-destructive">{errors.noticePeriod.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="isInNotice">Currently in Notice?</Label>
+                    <Label htmlFor="isInNotice">Currently in Notice? <span className="text-destructive">*</span></Label>
                     <Select
                       value={isInNotice}
                       onValueChange={(value) => setValue("isInNotice", value)}
@@ -414,9 +438,12 @@ const JobApplicationForm = () => {
                         <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.isInNotice && (
+                      <p className="text-xs text-destructive">{errors.isInNotice.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="isImmediateJoiner">Immediate Joiner?</Label>
+                    <Label htmlFor="isImmediateJoiner">Immediate Joiner? <span className="text-destructive">*</span></Label>
                     <Select
                       value={isImmediateJoiner}
                       onValueChange={(value) => setValue("isImmediateJoiner", value)}
@@ -429,6 +456,9 @@ const JobApplicationForm = () => {
                         <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.isImmediateJoiner && (
+                      <p className="text-xs text-destructive">{errors.isImmediateJoiner.message}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -441,7 +471,7 @@ const JobApplicationForm = () => {
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="hasOffers">Other Offers in Hand?</Label>
+                    <Label htmlFor="hasOffers">Other Offers in Hand? <span className="text-destructive">*</span></Label>
                     <Select
                       value={hasOffers}
                       onValueChange={(value) => setValue("hasOffers", value)}
@@ -454,41 +484,56 @@ const JobApplicationForm = () => {
                         <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.hasOffers && (
+                      <p className="text-xs text-destructive">{errors.hasOffers.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="offeredCTC">Offered CTC (if any) (₹)</Label>
+                    <Label htmlFor="offeredCTC">Offered CTC (if any) (₹) <span className="text-destructive">*</span></Label>
                     <Input
                       id="offeredCTC"
                       placeholder="1400000"
                       {...register("offeredCTC")}
                     />
+                    {errors.offeredCTC && (
+                      <p className="text-xs text-destructive">{errors.offeredCTC.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="certifications">Certifications</Label>
+                    <Label htmlFor="certifications">Certifications <span className="text-destructive">*</span></Label>
                     <Input
                       id="certifications"
                       placeholder="AWS Certified, Azure Solutions Architect"
                       {...register("certifications")}
                     />
+                    {errors.certifications && (
+                      <p className="text-xs text-destructive">{errors.certifications.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="referredBy">Referred By</Label>
+                    <Label htmlFor="referredBy">Referred By <span className="text-destructive">*</span></Label>
                     <Input
                       id="referredBy"
                       placeholder="Employee Name or N/A"
                       {...register("referredBy")}
                     />
+                    {errors.referredBy && (
+                      <p className="text-xs text-destructive">{errors.referredBy.message}</p>
+                    )}
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="comments">Additional Comments</Label>
+                  <Label htmlFor="comments">Additional Comments <span className="text-destructive">*</span></Label>
                   <Textarea
                     id="comments"
                     placeholder="Any additional information you'd like to share..."
                     className="min-h-[100px] resize-none"
                     {...register("comments")}
                   />
+                  {errors.comments && (
+                    <p className="text-xs text-destructive">{errors.comments.message}</p>
+                  )}
                 </div>
               </div>
 
