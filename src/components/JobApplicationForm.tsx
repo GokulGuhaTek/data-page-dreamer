@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,75 +11,122 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 import { Briefcase, Mail, Phone, MapPin, DollarSign, Clock, FileText, Upload } from "lucide-react";
 
+// Validation schema for all mandatory fields
+const applicationSchema = z.object({
+  name: z.string().min(1, "Full name is required").max(100, "Name must be less than 100 characters"),
+  email: z.string().min(1, "Email is required").email("Invalid email address").max(255),
+  contactNumber: z.string().min(1, "Contact number is required").max(20),
+  linkedinProfile: z.string().optional(),
+  resume: z.instanceof(FileList).refine((files) => files?.length > 0, "Resume is required"),
+  interestedPosition: z.string().min(1, "Please select a position"),
+  currentRole: z.string().optional(),
+  currentOrganization: z.string().optional(),
+  totalExperience: z.string().min(1, "Total experience is required"),
+  currentLocation: z.string().optional(),
+  locationPreference: z.string().optional(),
+  currentCTC: z.string().optional(),
+  expectedCTC: z.string().optional(),
+  noticePeriod: z.string().optional(),
+  isInNotice: z.string().optional(),
+  isImmediateJoiner: z.string().optional(),
+  hasOffers: z.string().optional(),
+  offeredCTC: z.string().optional(),
+  certifications: z.string().optional(),
+  referredBy: z.string().optional(),
+  comments: z.string().optional(),
+});
+
+type ApplicationFormData = z.infer<typeof applicationSchema>;
+
 const JobApplicationForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    contactNumber: "",
-    interestedPosition: "",
-    currentRole: "",
-    currentOrganization: "",
-    currentLocation: "",
-    currentCTC: "",
-    expectedCTC: "",
-    totalExperience: "",
-    noticePeriod: "",
-    isInNotice: "",
-    isImmediateJoiner: "",
-    hasOffers: "",
-    offeredCTC: "",
-    locationPreference: "",
-    certifications: "",
-    linkedinProfile: "",
-    comments: "",
-    referredBy: "",
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    reset,
+  } = useForm<ApplicationFormData>({
+    resolver: zodResolver(applicationSchema),
   });
 
-  const [resume, setResume] = useState<File | null>(null);
+  const interestedPosition = watch("interestedPosition");
+  const locationPreference = watch("locationPreference");
+  const isInNotice = watch("isInNotice");
+  const isImmediateJoiner = watch("isImmediateJoiner");
+  const hasOffers = watch("hasOffers");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const onSubmit = async (data: ApplicationFormData) => {
+    setIsSubmitting(true);
+    
+    try {
+      // Prepare form data for cloud storage
+      const formPayload = new FormData();
+      
+      // Add all form fields
+      const applicationData = {
+        fullName: data.name,
+        email: data.email,
+        contactNumber: data.contactNumber,
+        linkedinProfile: data.linkedinProfile || "",
+        interestedPosition: data.interestedPosition,
+        currentRole: data.currentRole || "",
+        currentOrganization: data.currentOrganization || "",
+        totalExperience: data.totalExperience,
+        currentLocation: data.currentLocation || "",
+        locationPreference: data.locationPreference || "",
+        currentCTC: data.currentCTC || "",
+        expectedCTC: data.expectedCTC || "",
+        noticePeriod: data.noticePeriod || "",
+        currentlyInNotice: data.isInNotice || "",
+        immediateJoiner: data.isImmediateJoiner || "",
+        otherOffersInHand: data.hasOffers || "",
+        offeredCTC: data.offeredCTC || "",
+        certifications: data.certifications || "",
+        referredBy: data.referredBy || "",
+        additionalInfo: data.comments || "",
+        submittedAt: new Date().toISOString(),
+      };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value });
-  };
+      // Add JSON data as blob
+      formPayload.append(
+        "data",
+        new Blob([JSON.stringify(applicationData)], { type: "application/json" })
+      );
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setResume(e.target.files[0]);
+      // Add resume file
+      if (data.resume && data.resume[0]) {
+        formPayload.append("resume", data.resume[0]);
+      }
+
+      // Get cloud endpoint from environment or use placeholder
+      const CLOUD_ENDPOINT = import.meta.env.VITE_CLOUD_ENDPOINT || "https://your-backend-endpoint.com/api/applications";
+
+      // Submit to external cloud storage
+      const response = await fetch(CLOUD_ENDPOINT, {
+        method: "POST",
+        body: formPayload,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      
+      toast.success("✅ Application submitted successfully! We'll get back to you soon.");
+      
+      // Reset form after successful submission
+      reset();
+      
+    } catch (error) {
+      console.error("Application submission error:", error);
+      toast.error("❌ Failed to submit application. Please try again or contact support.");
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Application submitted:", formData);
-    console.log("Resume file:", resume);
-    toast.success("Application submitted successfully! We'll get back to you soon.");
-    // Reset form
-    setResume(null);
-    setFormData({
-      name: "",
-      email: "",
-      contactNumber: "",
-      interestedPosition: "",
-      currentRole: "",
-      currentOrganization: "",
-      currentLocation: "",
-      currentCTC: "",
-      expectedCTC: "",
-      totalExperience: "",
-      noticePeriod: "",
-      isInNotice: "",
-      isImmediateJoiner: "",
-      hasOffers: "",
-      offeredCTC: "",
-      locationPreference: "",
-      certifications: "",
-      linkedinProfile: "",
-      comments: "",
-      referredBy: "",
-    });
   };
 
   return (
@@ -92,7 +142,7 @@ const JobApplicationForm = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 sm:p-6 lg:p-8">
-            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 md:space-y-8">
               {/* Personal Information */}
               <div className="space-y-3 md:space-y-4">
                 <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
@@ -101,30 +151,30 @@ const JobApplicationForm = () => {
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name *</Label>
+                    <Label htmlFor="name">Full Name <span className="text-destructive">*</span></Label>
                     <Input
                       id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
                       placeholder="John Doe"
+                      {...register("name")}
                     />
+                    {errors.name && (
+                      <p className="text-xs text-destructive">{errors.name.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email" className="flex items-center gap-2">
                       <Mail className="w-4 h-4" />
-                      Email ID *
+                      Email ID <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="email"
-                      name="email"
                       type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
                       placeholder="john@example.com"
+                      {...register("email")}
                     />
+                    {errors.email && (
+                      <p className="text-xs text-destructive">{errors.email.message}</p>
+                    )}
                   </div>
                 </div>
                 
@@ -132,25 +182,23 @@ const JobApplicationForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="contactNumber" className="flex items-center gap-2">
                       <Phone className="w-4 h-4" />
-                      Contact Number *
+                      Contact Number <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="contactNumber"
-                      name="contactNumber"
-                      value={formData.contactNumber}
-                      onChange={handleInputChange}
-                      required
                       placeholder="+91 9876543210"
+                      {...register("contactNumber")}
                     />
+                    {errors.contactNumber && (
+                      <p className="text-xs text-destructive">{errors.contactNumber.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="linkedinProfile">LinkedIn Profile</Label>
                     <Input
                       id="linkedinProfile"
-                      name="linkedinProfile"
-                      value={formData.linkedinProfile}
-                      onChange={handleInputChange}
                       placeholder="linkedin.com/in/johndoe"
+                      {...register("linkedinProfile")}
                     />
                   </div>
                 </div>
@@ -159,24 +207,18 @@ const JobApplicationForm = () => {
                 <div className="space-y-2">
                   <Label htmlFor="resume" className="flex items-center gap-2">
                     <Upload className="w-4 h-4" />
-                    Upload Resume / CV *
+                    Upload Resume / CV <span className="text-destructive">*</span>
                   </Label>
-                  <div className="flex items-center gap-4">
-                    <Input
-                      id="resume"
-                      name="resume"
-                      type="file"
-                      onChange={handleFileChange}
-                      required
-                      accept=".pdf,.doc,.docx,.txt,.rtf"
-                      className="cursor-pointer file:cursor-pointer"
-                    />
-                    {resume && (
-                      <span className="text-sm text-muted-foreground">
-                        {resume.name}
-                      </span>
-                    )}
-                  </div>
+                  <Input
+                    id="resume"
+                    type="file"
+                    accept=".pdf,.doc,.docx,.txt,.rtf"
+                    className="cursor-pointer file:cursor-pointer"
+                    {...register("resume")}
+                  />
+                  {errors.resume && (
+                    <p className="text-xs text-destructive">{errors.resume.message}</p>
+                  )}
                   <p className="text-xs text-muted-foreground">
                     Accepted formats: PDF, DOC, DOCX, TXT, RTF (Max 5MB)
                   </p>
@@ -191,11 +233,10 @@ const JobApplicationForm = () => {
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="interestedPosition">Interested Position *</Label>
+                    <Label htmlFor="interestedPosition">Interested Position <span className="text-destructive">*</span></Label>
                     <Select
-                      value={formData.interestedPosition}
-                      onValueChange={(value) => handleSelectChange("interestedPosition", value)}
-                      required
+                      value={interestedPosition}
+                      onValueChange={(value) => setValue("interestedPosition", value)}
                     >
                       <SelectTrigger className="w-full bg-background">
                         <SelectValue placeholder="Select a position" />
@@ -217,15 +258,16 @@ const JobApplicationForm = () => {
                         <SelectItem value="Fresher">Fresher</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.interestedPosition && (
+                      <p className="text-xs text-destructive">{errors.interestedPosition.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="currentRole">Current Role</Label>
                     <Input
                       id="currentRole"
-                      name="currentRole"
-                      value={formData.currentRole}
-                      onChange={handleInputChange}
                       placeholder="Senior Developer"
+                      {...register("currentRole")}
                     />
                   </div>
                 </div>
@@ -235,26 +277,24 @@ const JobApplicationForm = () => {
                     <Label htmlFor="currentOrganization">Current Organization</Label>
                     <Input
                       id="currentOrganization"
-                      name="currentOrganization"
-                      value={formData.currentOrganization}
-                      onChange={handleInputChange}
                       placeholder="Tech Corp"
+                      {...register("currentOrganization")}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="totalExperience" className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      Total Years of Experience *
+                      Total Years of Experience <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="totalExperience"
-                      name="totalExperience"
                       type="number"
-                      value={formData.totalExperience}
-                      onChange={handleInputChange}
-                      required
                       placeholder="5"
+                      {...register("totalExperience")}
                     />
+                    {errors.totalExperience && (
+                      <p className="text-xs text-destructive">{errors.totalExperience.message}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -270,17 +310,15 @@ const JobApplicationForm = () => {
                     <Label htmlFor="currentLocation">Current Location</Label>
                     <Input
                       id="currentLocation"
-                      name="currentLocation"
-                      value={formData.currentLocation}
-                      onChange={handleInputChange}
                       placeholder="Bangalore"
+                      {...register("currentLocation")}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="locationPreference">Location Preference</Label>
                     <Select
-                      value={formData.locationPreference}
-                      onValueChange={(value) => handleSelectChange("locationPreference", value)}
+                      value={locationPreference}
+                      onValueChange={(value) => setValue("locationPreference", value)}
                     >
                       <SelectTrigger className="w-full bg-background">
                         <SelectValue placeholder="Select location preference" />
@@ -306,10 +344,8 @@ const JobApplicationForm = () => {
                     </Label>
                     <Input
                       id="currentCTC"
-                      name="currentCTC"
-                      value={formData.currentCTC}
-                      onChange={handleInputChange}
                       placeholder="1200000"
+                      {...register("currentCTC")}
                     />
                   </div>
                   <div className="space-y-2">
@@ -319,10 +355,8 @@ const JobApplicationForm = () => {
                     </Label>
                     <Input
                       id="expectedCTC"
-                      name="expectedCTC"
-                      value={formData.expectedCTC}
-                      onChange={handleInputChange}
                       placeholder="1500000"
+                      {...register("expectedCTC")}
                     />
                   </div>
                 </div>
@@ -339,19 +373,16 @@ const JobApplicationForm = () => {
                     <Label htmlFor="noticePeriod">Notice Period (Days)</Label>
                     <Input
                       id="noticePeriod"
-                      name="noticePeriod"
                       type="number"
-                      value={formData.noticePeriod}
-                      onChange={handleInputChange}
                       placeholder="30"
+                      {...register("noticePeriod")}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="isInNotice">Currently in Notice?</Label>
                     <Select
-                      name="isInNotice"
-                      value={formData.isInNotice}
-                      onValueChange={(value) => handleSelectChange("isInNotice", value)}
+                      value={isInNotice}
+                      onValueChange={(value) => setValue("isInNotice", value)}
                     >
                       <SelectTrigger className="bg-background">
                         <SelectValue placeholder="Select" />
@@ -365,9 +396,8 @@ const JobApplicationForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="isImmediateJoiner">Immediate Joiner?</Label>
                     <Select
-                      name="isImmediateJoiner"
-                      value={formData.isImmediateJoiner}
-                      onValueChange={(value) => handleSelectChange("isImmediateJoiner", value)}
+                      value={isImmediateJoiner}
+                      onValueChange={(value) => setValue("isImmediateJoiner", value)}
                     >
                       <SelectTrigger className="bg-background">
                         <SelectValue placeholder="Select" />
@@ -391,9 +421,8 @@ const JobApplicationForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="hasOffers">Other Offers in Hand?</Label>
                     <Select
-                      name="hasOffers"
-                      value={formData.hasOffers}
-                      onValueChange={(value) => handleSelectChange("hasOffers", value)}
+                      value={hasOffers}
+                      onValueChange={(value) => setValue("hasOffers", value)}
                     >
                       <SelectTrigger className="bg-background">
                         <SelectValue placeholder="Select" />
@@ -408,49 +437,50 @@ const JobApplicationForm = () => {
                     <Label htmlFor="offeredCTC">Offered CTC (if any) (₹)</Label>
                     <Input
                       id="offeredCTC"
-                      name="offeredCTC"
-                      value={formData.offeredCTC}
-                      onChange={handleInputChange}
                       placeholder="1400000"
+                      {...register("offeredCTC")}
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="certifications">Certifications</Label>
                     <Input
                       id="certifications"
-                      name="certifications"
-                      value={formData.certifications}
-                      onChange={handleInputChange}
                       placeholder="AWS Certified, Azure Solutions Architect"
+                      {...register("certifications")}
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="referredBy">Referred By</Label>
                     <Input
                       id="referredBy"
-                      name="referredBy"
-                      value={formData.referredBy}
-                      onChange={handleInputChange}
-                      placeholder="Employee name or reference code"
-                    />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="comments">Comments / Additional Information</Label>
-                    <Textarea
-                      id="comments"
-                      name="comments"
-                      value={formData.comments}
-                      onChange={handleInputChange}
-                      placeholder="Tell us anything else you'd like us to know..."
-                      className="min-h-[100px]"
+                      placeholder="Employee Name or N/A"
+                      {...register("referredBy")}
                     />
                   </div>
                 </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="comments">Additional Comments</Label>
+                  <Textarea
+                    id="comments"
+                    placeholder="Any additional information you'd like to share..."
+                    className="min-h-[100px] resize-none"
+                    {...register("comments")}
+                  />
+                </div>
               </div>
 
-              <Button type="submit" size="lg" className="w-full" variant="hero">
-                Submit Application
-              </Button>
+              {/* Submit Button */}
+              <div className="flex justify-center pt-4">
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 py-6 text-base sm:text-lg"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Application"}
+                </Button>
+              </div>
             </form>
           </CardContent>
         </Card>
