@@ -50,6 +50,28 @@ const JobApplicationForm = () => {
     reset,
   } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      contactNumber: "",
+      linkedinProfile: "",
+      interestedPosition: "",
+      currentRole: "",
+      currentOrganization: "",
+      totalExperience: "",
+      currentLocation: "",
+      locationPreference: "",
+      currentCTC: "",
+      expectedCTC: "",
+      noticePeriod: "",
+      isInNotice: "",
+      isImmediateJoiner: "",
+      hasOffers: "",
+      offeredCTC: "",
+      certifications: "",
+      referredBy: "",
+      comments: "",
+    },
   });
 
   const interestedPosition = watch("interestedPosition");
