@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Briefcase, ArrowRight } from "lucide-react";
+import { Briefcase, ArrowRight, BookOpen } from "lucide-react";
 
 const Index = () => {
   return (
@@ -12,13 +12,22 @@ const Index = () => {
         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           Building innovative technology solutions for tomorrow
         </p>
-        <Link to="/careers">
-          <Button variant="hero" size="lg">
-            <Briefcase className="mr-2" />
-            View Career Opportunities
-            <ArrowRight className="ml-2" />
-          </Button>
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link to="/careers">
+            <Button variant="hero" size="lg">
+              <Briefcase className="mr-2" />
+              View Career Opportunities
+              <ArrowRight className="ml-2" />
+            </Button>
+          </Link>
+          <Link to="/blog">
+            <Button variant="outline" size="lg">
+              <BookOpen className="mr-2" />
+              Read Our Blog
+              <ArrowRight className="ml-2" />
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
